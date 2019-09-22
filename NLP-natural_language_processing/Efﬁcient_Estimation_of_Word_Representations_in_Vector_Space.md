@@ -1,12 +1,12 @@
 ## 单词在向量空间的有效估计
 
-### 原文：**[Efficient Estimation of Word Representations in Vector Space]** **(https://arxiv.org/abs/1301.3781)
+### 原文：[Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/abs/1301.3781)
 ### 作者：Tomas Mikolow, Kai Chen, Greg Corrado, Jeffrey Dean
 ### Google
 
 ### 目录：
 
-**[TOC]** **
+[TOC]
 
 #### 摘要
 
