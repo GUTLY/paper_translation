@@ -69,7 +69,7 @@
 
 RNN模型每个训练样本的复杂度为：
 
-![computational complexity：Q = H × H + H × V ](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no3.png)
+![training complexity：Q = H × H + H × V ](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no3.png)
 
 单词的表征 D 和隐藏层 H 有相同的维度。再次，H × V 项通过使用分层softmax可以有效的减少到 H × log2(v)。最多的复杂度来源于 H × H 项。
 
@@ -87,14 +87,34 @@ RNN模型每个训练样本的复杂度为：
 
 第一个提出的架构和前馈 NNLM 相似，它移除了非线性的隐藏层，同时所有单词共享一个投影层（不仅仅是投影矩阵）；因此所有的的单词被投影到了相同的位置（它们的向量取平均值）。我们称这个架构为词袋模型，因为单词历史顺序对投影没有影响。更进一步，我们也使用单词作为构成未来词；我们在后面将要介绍的，使用四个未来词和四个历史词（four future and four history words)作为输入来构造一个对数线性分类器任务上得到了最佳的表现，它训练的标准是对当前（中间）词的正确分类器。训练复杂度为：
 
-![computational complexity：Q = N × D + D × log2(V) ](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no4.png)
+![training complexity：Q = N × D + D × log2(V) ](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no4.png)
 
 我们进一步的将模型表示为 CBOW，区别于标准的词袋模型，它使用上下文（context）的连续分布式表征。这个模型架构如图1所示。需要注意，输入和投影层之间的权重矩阵（weight matrix）使用与 NNLM 相同的方法在所有单词位置之间共享。
 
 ##### 3.2 连续Skip-gram模型 Continuous Skip-gram Model 
 
+第二个架构和 CBOW 相似，但相反的是是基于上下文来预测当前的单词，它试图最大限度地根据同一句话中的另一个词对一个词进行分类。更进一步，我们使用每个当前词（current word）作为具有连续投影层的对数线性分类器的输入，并且预测当前单词前后一定范围内的单词。我们发现范围的增加提高了输出词向量的质量，但是它也增加了计算的复杂度。因为与当前词与相接近的单词要比距离比较远的单词（distant word）有更高的相关度，在我们的训练示例中，通过减少对这些单词的采样，我们减少了对距离比较远的单词的权重。
+
+这点架构的训练复杂度为：
+
+![training complexity: Q = C × (D + D × log2(V)) ](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no5.png)
+
+C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练的单词我们将会在1到 C 的范围里选择一个随机数 R，接着使用当前词的 R 个历史单词和 R 个未来词作为正确的标签。这会要求我们做 R × 2 个单词的分类，其中当前词作为输入，R + R 个单词中的每一个都作为输出。在接下来的实验，我们使用 C=10.
+
+![figure 1](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no6.png)
+
+图一：新的模型架构。CBOW 架构基于上下文预测当前词，Skip-gram 根据当前词预测周围词。
 
 #### 4 结果 Rreaults
+
+为了比较不同版本词向量的质量，以前的论文为了便于直观的理解通常使用一个表格来展示样例词（example words）和它们最相似的词（similar words），虽然很容易看出“法国”这个词和意大利或者其他一些国家很相似。如下所示，在复杂的相似度任务中对这些向量进行处理将更具挑战性。根据前面的观察单词之间可以有很多不同类型的相似性，例如，“big”和“bigger”意思相近，“small”和“small”意思相近。另一种关系的例子是单词对big - biggest 和 small - smallest **[20]**。我们进一步将两对关系相同的单词表示为一个问句问句，正如我们可以问：“那个单词与 small 的相似与 biggest和 big 的相似相同？”【注：就像，small - ？= big - biggest】。
+
+令人惊奇的是，这些问题可以通过执行简单的单词向量表征的代数操作来回答。未来发现一个单词与 small 的相似与 biggest和 big 的相似相同，我们可以计算向量 X = 向量（“biggest”） - 向量（“big”） + 向量（“small”）。接着我们通过余弦距离（consine distance）在向量空间寻找最接近与 X 的向量，然后使用它作为问题的答案（我们在搜索过程中丢弃了输入的问题词）。当词向量被很好的训练后，可以使用这个方法的到正确的答案（smallest）。
+
+最后，我们发现在大数据集上训练高维词向量后，得到的结果向量可以用来回答单词之间的非常精妙的语义关系。例如，一个城市和它所属的国家的语义关系，法国对巴黎与德国对柏林相似。这种语义关系的词向量可以用来提高像机器翻译、信息检索和问答系统一样的许多 NLP 应用，也可以用在未来提出的应用上。
+
+表 1：Semantic Syntactic Word Relationship测试集的5种语义示例和9种句法问题示例。[原表连接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no8.png)
+![](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no7.png)
 
 ##### 4.1 任务描述 Task Description
 
@@ -121,39 +141,21 @@ RNN模型每个训练样本的复杂度为：
 #### 参考文献 References
 
 **[1]**  Y. Bengio, R. Ducharme, P. Vincent. A neural probabilistic language model. Journal of Machine Learning Research, 3:1137-1155, 2003.
-
 **[2]** Y. Bengio, Y. LeCun. Scaling learning algorithms towards AI. In: Large-Scale Kernel Machines, MIT Press, 2007. 
-
 **[4]** R. Collobert and J. Weston. A Uniﬁed Architecture for Natural Language Processing: Deep Neural Networks with Multitask Learning. In International Conference on Machine Learning, ICML, 2008. 
-
 **[5]** R. Collobert, J. Weston, L. Bottou, M. Karlen, K. Kavukcuoglu and P. Kuksa. Natural Language Processing (Almost) from Scratch. Journal of Machine Learning Research, 12:24932537, 2011
-
 **[6]** J. Dean, G.S. Corrado, R. Monga, K. Chen, M. Devin, Q.V. Le, M.Z. Mao, M.A. Ranzato, A. Senior, P. Tucker, K. Yang, A. Y. Ng., Large Scale Distributed Deep Networks, NIPS, 2012. 
-
 **[7]** J.C. Duchi, E. Hazan, and Y. Singer. Adaptive subgradient methods for online learning and stochastic optimization. Journal of Machine Learning Research, 2011. 
-
 **[8]** J. Elman. Finding Structure in Time. Cognitive Science, 14, 179-211, 1990
-
 **[9]** EricH.Huang,R.Socher,C.D.Manning and Andrew Y.Ng.Improving Word Representations via Global Context and Multiple Word Prototypes. In: Proc. Association for Computational Linguistics, 2012.
-
 **[13]** T. Mikolov. Language Modeling for Speech Recognition in Czech, Masters thesis, Brno University of Technology, 2007. 
-
 **[14]** T. Mikolov, J. Kopeck´y, L. Burget, O. Glembek and J. ˇCernock´y. Neural network based language models for higly inﬂective languages, In: Proc. ICASSP 2009.
-
 **[15]** T. Mikolov, M. Karaﬁ´at, L. Burget, J. ˇCernock´y, S. Khudanpur. Recurrent neural network based language model, In: Proceedings of Interspeech, 2010. 
-
 **[16]** T.Mikolov,S.Kombrink,L.Burget,J. ˇCernock´y,S.Khudanpur.Extensionsofrecurrentneural network language model, In: Proceedings of ICASSP 2011. 
-
 **[18]** T. Mikolov, A. Deoras, D. Povey, L. Burget, J. ˇCernock´y. Strategies for Training Large Scale Neural Network Language Models, In: Proc. Automatic Speech Recognition and Understanding, 2011. 
-
 **[20]** T. Mikolov, W.T. Yih, G. Zweig. Linguistic Regularities in Continuous Space Word Representations. NAACL HLT 2013.
-
 **[23]** A.Mnih,G.Hinton. A Scalable Hierarchical Distributed Language Model.Advances in Neural Information Processing Systems 21, MIT Press, 2009. 
-
 **[25]** F. Morin, Y. Bengio. Hierarchical Probabilistic Neural Network Language Model. AISTATS, 2005. 
-
 **[26]** D. E. Rumelhart, G. E. Hinton, R. J. Williams. Learning internal representations by backpropagating errors. Nature, 323:533.536, 1986. 
-
 **[29]** J. Turian, L. Ratinov, Y. Bengio. Word Representations: A Simple and General Method for Semi-Supervised Learning. In: Proc. Association for Computational Linguistics, 2010.
-
 **[31]** A. Zhila, W.T. Yih, C. Meek, G. Zweig, T. Mikolov. Combining Heterogeneous Models for Measuring Relational Similarity. NAACL HLT 2013. 
