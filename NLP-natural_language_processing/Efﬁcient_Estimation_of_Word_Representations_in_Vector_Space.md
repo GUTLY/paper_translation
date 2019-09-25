@@ -114,6 +114,7 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 最后，我们发现在大数据集上训练高维词向量后，得到的结果向量可以用来回答单词之间的非常精妙的语义关系。例如，一个城市和它所属的国家的语义关系，法国对巴黎与德国对柏林相似。这种语义关系的词向量可以用来提高像机器翻译、信息检索和问答系统一样的许多 NLP 应用，也可以用在未来提出的应用上。
 
 表 1：Semantic Syntactic Word Relationship测试集的5种语义示例和9种句法问题示例。[原表连接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no8.png)
+
 ![](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no7.png)
 
 ##### 4.1 任务描述 Task Description
