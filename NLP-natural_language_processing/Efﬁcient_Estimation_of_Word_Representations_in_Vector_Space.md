@@ -101,7 +101,7 @@ RNN模型每个训练样本的复杂度为：
 
 C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练的单词我们将会在1到 C 的范围里选择一个随机数 R，接着使用当前词的 R 个历史单词和 R 个未来词作为正确的标签。这会要求我们做 R × 2 个单词的分类，其中当前词作为输入，R + R 个单词中的每一个都作为输出。在接下来的实验，我们使用 C=10.
 
-![figure 1](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no6.png)
+![figure 1](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no6.PNG)
 
 图一：新的模型架构。CBOW 架构基于上下文预测当前词，Skip-gram 根据当前词预测周围词。
 
@@ -113,9 +113,9 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 
 最后，我们发现在大数据集上训练高维词向量后，得到的结果向量可以用来回答单词之间的非常精妙的语义关系。例如，一个城市和它所属的国家的语义关系，法国对巴黎与德国对柏林相似。这种语义关系的词向量可以用来提高像机器翻译、信息检索和问答系统一样的许多 NLP 应用，也可以用在未来提出的应用上。
 
-表 1：Semantic Syntactic Word Relationship测试集的5种语义示例和9种句法问题示例。[原表连接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no8.png)
+表 1：Semantic Syntactic Word Relationship测试集的5种语义示例和9种句法问题示例。[原表连接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no8.PNG)
 
-![](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no7.png)
+![](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no7.PNG)
 
 ##### 4.1 任务描述 Task Description
 
