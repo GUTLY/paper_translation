@@ -113,7 +113,7 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 
 最后，我们发现在大数据集上训练高维词向量后，得到的结果向量可以用来回答单词之间的非常精妙的语义关系。例如，一个城市和它所属的国家的语义关系，法国对巴黎与德国对柏林相似。这种语义关系的词向量可以用来提高像机器翻译、信息检索和问答系统一样的许多 NLP 应用，也可以用在未来提出的应用上。
 
-表 1：语义-句法词关系测试集（Semantic Syntactic Word Relationship test set）的5种语义示例和9种句法问题示例。[原表连接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no8.PNG)
+表 1：语义-句法词关系测试集（Semantic Syntactic Word Relationship test set）的5种语义示例和9种句法问题示例。[原表链接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no8.PNG)
 
 ![表 1](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no7.PNG)
 
@@ -127,13 +127,13 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 
 我们使用谷歌新闻语料库（Google News corpus）训练词向量。这个语料库包括60亿标记。我们限制单词表大小为100万个最频繁的单词。现然我们面对着时间约束的优化问题，正如预料的那样使用更多数据和更高维度的词向量能够提高精度。为了估算模型架构的最佳选择，以便快速获得尽可能好的结果，我们首先评估了在训练数据子集上训练的模型，词汇量限制为最频繁的3万词。表 2展示了 CBOW 架构于不同词向量维度和增加训练数据量的结果。
 
-表 2：使用 CBOW 架构和限制的单词表的词向量在语义-句法词关系测试子集上的精度。其中的问题只包含使用频率最高的3万个单词。[原表连接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no9.png)
+表 2：使用 CBOW 架构和限制的单词表的词向量在语义-句法词关系测试子集上的精度。其中的问题只包含使用频率最高的3万个单词。[原表链接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no9.png)
 
 ![表 2](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no10.png)
 
-表 3：词向量维度选择640维时，不同模型架构训练相同数据之间的比较。我们报告了在语义-句法词关系测试集上的准确度，也在 **[20]** 中报告了在句法关系测试集上的准确度。
+表 3：词向量维度选择640维时，不同模型架构训练相同数据之间的比较。我们报告了在语义-句法词关系测试集上的准确度，也在 **[20]** 中报告了在句法关系测试集上的准确度。[原表链接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no12.png)
 
-
+![表 3](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no11.png)
 
 ##### 4.3 模型架构间的比较  Comparison of Model Architectures
 
