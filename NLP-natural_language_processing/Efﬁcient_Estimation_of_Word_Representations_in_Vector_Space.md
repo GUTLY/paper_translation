@@ -113,7 +113,7 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 
 最后，我们发现在大数据集上训练高维词向量后，得到的结果向量可以用来回答单词之间的非常精妙的语义关系。例如，一个城市和它所属的国家的语义关系，法国对巴黎与德国对柏林相似。这种语义关系的词向量可以用来提高像机器翻译、信息检索和问答系统一样的许多 NLP 应用，也可以用在未来提出的应用上。
 
-表 1：语义-句法词关系测试集（Semantic Syntactic Word Relationship test set）的5种语义示例和9种句法问题示例。[原表链接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no8.PNG)
+表 1：语义-句法词关系测试集（Semantic-Syntactic Word Relationship test set）的5种语义示例和9种句法问题示例。[原表链接](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no8.PNG)
 
 ![表 1](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no7.PNG)
 
@@ -143,12 +143,48 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 
 ##### 4.3 模型架构间的比较  Comparison of Model Architectures
 
+在先前的测试中，我们比较了不同模型架构在相同数据集生成的649维的词向量。在接下来的实验中，我们使用了新的语义-句法词关系测试集的全部问题。例如，不在限制词典数为3万。我们还包括了 **[20]** 中引入的测试集的结果，这个测试记重点关注于单词间的语法相似度。
+
+这个测试集包括了一些 LDC 语料库，**[18]** 中有它们的细节介绍（3亿2千万字，8万2千词）。我们使用这些数据与之前在单个CPU上训练了8周的循环神经网络语言模型进行比较。我们使用 DistBelief并行训练（DistBelief parallel training）**[6]**技术，训练了一个具有640个隐藏单元的前馈NNLM。它使用8个历史先前词（history of 8 previous words），因此 NNLM 比 RNNLM 有更多的参数，它的投影层大小为640 × 8。
+
+从表3中可以看出，RNN 词向量（在 **[20]** 中使用）在句法问题上有更好的表现。毫不意外的是，NNLM 向量表现比 RNN更好。因为 RNNLM的词向量直接于非线性的隐藏层链接。CBOW 架构在句法任务上比 NNLM精度更高，同时在语义上也差不多。最后，Skip-gram 架构在句法任务上比 CBOW略差（但仍比 NNLM好），但是它在测试集句法部分的表现要比其他的模型更好。
+
+接下来，我们使用一个 CPU评估了我们训练的模型，并且比较了针对公共可用字向量（publicly available word vectors)的结果。表4给出了比较的结果。模型CBOW模型在Google新闻数据子集上训练了大约一天，而Skip-gram模型的训练时间约为三天。
+
+表 4：针对在语义-句法词关系测试集的公共可用字向量（publicly available word vectors)的比较，词向量来源于模型。使用了所有的单词。
+![表 4](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no13.png)
+
+表 5：在相同数据集上，使用3个训练时期和1个训练时期所得出的模型间比较。在完整的语义-句法数据集上报告准确性。
+![表 5](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no14.png)
+
+如表5所示，使用1个训练时期在两倍数据上训练模型所得到的结果要比在3个训练时期上对相同数据进行迭代获得的结果相近或更好，并且训练速度更快。
+
 ##### 4.4 大规模的并行模型训练  Large Scale Parallel Training of Models
 
+如上文所述，我们在 DistBelief分布式框架上实施各种模型。下面我们报告了在Google新闻60亿数据集上，使用小批量异步梯度下降和称为 Adagrad **[7]** 的自适应学习率程序，训练的几个模型的结果。在训练期间，我们使用50到100个模型复制。由于数据中心计算机与其他生产任务共享，因此CPU内核数是一个估计值，其使用量可能会变化很多。请注意，由于分布式框架的开销，除单机实现之外，CBOW模式下的Skip-gram模型的CPU使用率与之接近。结果记录在表6中。
+
+表 6：使用DistBelief分布式框架训练的模型比较。请注意，训练1000维的 NNLM模型向量将花费太长时间
+![表 6](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no15.png)
+
+表 7：微软研究的语句完成挑战中模型的比较和组合。
+![表 7](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no16.png)
 
 ##### 4.5 微软研究的语句完成挑战  Microsoft Research Sentence Completion Challenge 
 
-#### 5 学习关系的一些例子  Examples of the Learned Relationships
+微软研究句子完成挑战最近被作为高级语言模型和其他的 NLP技术 **[32]** 的任务提出。这个任务包括 1040个句子，每个句子里都少了一个单词，其目标是在给出的 5个合理选择的列表的情况下，选择与该句子其余部分最相关的单词。几个技术在这个数据集上的表现已经列出，其中包括 N-gram模型，LSA-based模型 **[32]**，对数双线性模型 **[24]**和一个循环神经网络的组合，它目前在该基准上保持55.4％的精确度 **[19]**。
+
+我们也在这个任务下探索了 Skip-gram架构的表现。首先，我们用 **[32]** 提供的5千万单词训练640维模型，接着我们通过使用输入中的未知单词来计算测试集上每个句子的得分，并预测句子周围的所有单词。使用句子得分，我们从中选择最相似的句子。
+
+表7简要总结了一些先前的结果和新的结果。尽管，Skip-gram模型在任务中表现不如 LSA相似性模型，但是它的得分与 RNNLM模型获得的分数互补，通过加权组合，得到了准确度58.9%的最佳结果（训练部分为的59.2%，测试部分为58.7%)。
+
+#### 5 学习关系的示例  Examples of the Learned Relationships
+
+表8显示了遵循各种关系的单词。我们遵循上述方法，通过减去两个单词向量定义关系，并将结果添加到另一个单词中。例如，巴黎 - 法国 + 意大利 = 罗马【原文：Paris - France + Italy = Rome】。从表中可以看出，准确度还不错，尽管还有许多的改进空间（请注意，使用我们假设精确匹配的准确度指标，表8中的结果只会得分约60％）。我们认为，使用更大规模数据集和更多维度训练的词向量将会有更好的表现，并且能开发出新的革命性的应用。提高准确性的另一种方法是提供一个以上的关系示例。通过使用10个示例而不是使用1个示例来构成关系向量（我们将各个向量平均在一起），我们观察到，在语义-句法测试中，我们的最佳模型的准确性绝对提高了约10%。
+
+表 8：单词对关系的示例，使用表4中最好的词向量（基于7亿8千3百万单词的数据集，训练300维的 Skip-gram 模型）
+![表 8](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no17.png)
+
+也可以应用向量运算来解决不同的任务。例如，通过计算单词列表的平均向量并找到距离最远的单词向量，我们观察到了选择列表外单词的良好准确性。在某些人类智力测试中，这是一种常见的问题。显然，使用这些技术仍有许多发现。
 
 #### 6 结论  Conclusion
 
@@ -187,9 +223,13 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 
 **[18]** T. Mikolov, A. Deoras, D. Povey, L. Burget, J. ˇCernock´y. Strategies for Training Large Scale Neural Network Language Models, In: Proc. Automatic Speech Recognition and Understanding, 2011. 
 
+**[19]** T.Mikolov.Statistical Language Models based on Neural Networks.PhD thesis,Brno University of Technology, 2012. 
+
 **[20]** T. Mikolov, W.T. Yih, G. Zweig. Linguistic Regularities in Continuous Space Word Representations. NAACL HLT 2013.
 
 **[23]** A.Mnih,G.Hinton. A Scalable Hierarchical Distributed Language Model.Advances in Neural Information Processing Systems 21, MIT Press, 2009. 
+
+**[24]** A. Mnih, Y.W. Teh. A fast and simple algorithm for training neural probabilistic language models. ICML, 2012. 
 
 **[25]** F. Morin, Y. Bengio. Hierarchical Probabilistic Neural Network Language Model. AISTATS, 2005. 
 
@@ -198,3 +238,6 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 **[29]** J. Turian, L. Ratinov, Y. Bengio. Word Representations: A Simple and General Method for Semi-Supervised Learning. In: Proc. Association for Computational Linguistics, 2010.
 
 **[31]** A. Zhila, W.T. Yih, C. Meek, G. Zweig, T. Mikolov. Combining Heterogeneous Models for Measuring Relational Similarity. NAACL HLT 2013. 
+
+**[32]** G. Zweig, C.J.C. Burges. The Microsoft Research Sentence Completion Challenge, Microsoft Research Technical Report MSR-TR-2011-129, 2011.
+
