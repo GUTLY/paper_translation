@@ -4,7 +4,7 @@
 #### NLP —— natural language processing
 
 [1、Efficient Estimation of Word Representations in Vector Space - 单词在向量空间的有效估计](./NLP-natural_language_processing/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space.md)
-Completed on 7 October 2019
+Completed on October 7, 2019, 17 days.
 
 ### 注：
 1. 水平堪忧-now
