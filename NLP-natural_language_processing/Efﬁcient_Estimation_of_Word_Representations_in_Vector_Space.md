@@ -184,12 +184,19 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 表 8：单词对关系的示例，使用表4中最好的词向量（基于7亿8千3百万单词的数据集，训练300维的 Skip-gram 模型）
 ![表 8](../images/Efﬁcient_Estimation_of_Word_Representations_in_Vector_Space/no17.png)
 
-也可以应用向量运算来解决不同的任务。例如，通过计算单词列表的平均向量并找到距离最远的单词向量，我们观察到了选择列表外单词的良好准确性。在某些人类智力测试中，这是一种常见的问题。显然，使用这些技术仍有许多发现。
+也可以应用向量运算来解决不同的任务。例如，通过计算单词列表的平均向量并找到距离最远的单词向量，我们观察到了选择列表外单词的良好准确性。在某些人类智力测试中，这是一种常见的问题。显然，这些技术的引用仍有许多待发现。
 
 #### 6 结论  Conclusion
 
+本文研究了一组句法和语义语言任务中，由不同模型导出的单词的向量表征的质量。我们观察到相比于流行的神经网络（前馈或者循环的），使用简单的模型架构训练高质量的词向量是有可能的。因为使用更低的计算复制度，它可以从大数据集中计算高维度的词向量。使用 DistBelief分布式框架，在有数万亿词和基本上无限大的词汇表的语料库上训练 CBOW和 Skip-gram模型是有可能的。这比之前发表的同类模型的最佳结果要大几个数量级。
+
+一个有趣的任务是semeval-2012任务2 **[11]**，其中单词向量最近被证明显著优于先前的技术水平。将公开可用的 RNN向量与其他技术一起使用，使Spearman的秩相关(Spearman's rank correlation）比以前的最佳结果 **[31]** 增加了50%以上。基于神经网络的的词向量在以前被用于许多 NLP任务上，例如情感分析 **[12]** 和语义检测 **[28]**。可以预料到，这些应用程序可以从本文描述的模型体系结构中获益。
+
+我们正在进行的工作表明，词向量可以成功地应用于知识库（Knowledge Bases）中事实的自动扩展（automatic extension of facts），同时可以验证已存在事实的正确性。机器翻译实验的结果也显得非常有前景。在未来，比较我们的技术与 Latent Relational Analysis **[30]**和其他方法也会很有趣。我们相信我们的综合测试集将有助于研究界改进现有的评估词性向量的技术。我么同时期待高质量的词向量在未来会成为 NLP应用的重要组成部分。
+
 #### 7 后续工作  Follow-Up Work
 
+在这篇论文的最初版本完成后，我们发布了计算单词向量的单机多线程的C++代码，使用连续词袋和 Skip-gram 架构。训练速度明显高于本文之前的报道。例如，对于典型的超参数选择，大约是每小时数十亿字。我们还发表了代表了命名的实体（named entities）的140多万个向量，训练了1000多亿个单词。一些接下来的工作将在 NIPS 2013论文中发布 **[21]**.
 
 
 
@@ -213,6 +220,10 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 
 **[9]** EricH.Huang,R.Socher,C.D.Manning and Andrew Y.Ng.Improving Word Representations via Global Context and Multiple Word Prototypes. In: Proc. Association for Computational Linguistics, 2012.
 
+**[11]** D.A. Jurgens, S.M. Mohammad, P.D. Turney, K.J. Holyoak. Semeval-2012 task 2: Measuring degrees of relational similarity.In: Proceedings of the 6th International Workshop on Semantic Evaluation (SemEval 2012), 2012. 
+
+**[12]** A.L. Maas, R.E. Daly, P.T. Pham, D. Huang, A.Y. Ng, and C. Potts. Learning word vectors for sentiment analysis. In Proceedings of ACL, 2011. 
+
 **[13]** T. Mikolov. Language Modeling for Speech Recognition in Czech, Masters thesis, Brno University of Technology, 2007. 
 
 **[14]** T. Mikolov, J. Kopeck´y, L. Burget, O. Glembek and J. ˇCernock´y. Neural network based language models for higly inﬂective languages, In: Proc. ICASSP 2009.
@@ -227,6 +238,8 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 
 **[20]** T. Mikolov, W.T. Yih, G. Zweig. Linguistic Regularities in Continuous Space Word Representations. NAACL HLT 2013.
 
+**[21]** T. Mikolov, I. Sutskever, K. Chen, G. Corrado, and J. Dean. Distributed Representations of Words and Phrases and their Compositionality. Accepted to NIPS 2013. 
+
 **[23]** A.Mnih,G.Hinton. A Scalable Hierarchical Distributed Language Model.Advances in Neural Information Processing Systems 21, MIT Press, 2009. 
 
 **[24]** A. Mnih, Y.W. Teh. A fast and simple algorithm for training neural probabilistic language models. ICML, 2012. 
@@ -234,6 +247,8 @@ C 为单词的最大距离。因此，如果我们选择 C=5，对每个训练�
 **[25]** F. Morin, Y. Bengio. Hierarchical Probabilistic Neural Network Language Model. AISTATS, 2005. 
 
 **[26]** D. E. Rumelhart, G. E. Hinton, R. J. Williams. Learning internal representations by backpropagating errors. Nature, 323:533.536, 1986. 
+
+**[28]** R. Socher, E.H. Huang, J. Pennington, A.Y. Ng, and C.D. Manning. Dynamic Pooling and Unfolding Recursive Autoencoders for Paraphrase Detection. In NIPS, 2011. 
 
 **[29]** J. Turian, L. Ratinov, Y. Bengio. Word Representations: A Simple and General Method for Semi-Supervised Learning. In: Proc. Association for Computational Linguistics, 2010.
 
