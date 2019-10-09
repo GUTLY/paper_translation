@@ -11,7 +11,7 @@ Completed on October 7, 2019, 17 days.
 
 [2、Distributed Representations of Words and Phrases and their Compositionality - 单词和短语的分布式表示及其组成](./NLP/Distributed_Representations_of_Words_and_Phrases_and_their_Compositionality.md)
 
-### 注：
+#### 注：
 1. 水平堪忧-now
 2. 参考包括但不限于：谷歌翻译，网易有道词典，百度翻译。。。。
 3. Since September 20, 2019
