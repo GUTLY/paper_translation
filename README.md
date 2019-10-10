@@ -2,7 +2,7 @@
 
 ***
 #### 综述 - review
-[1、Deep learning](./review/Deep_learning.md)
+[1、Deep learning - 深度学习](./review/Deep_learning.md)
 
 #### 自然语言处理 —— natural language processing（NLP）
 

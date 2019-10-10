@@ -2,7 +2,7 @@
 
 ### 原文：[Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/abs/1301.3781)
 ### 作者：Tomas Mikolow, Kai Chen, Greg Corrado, Jeffrey Dean
-### Google
+#### Google 2013
 
 ### 目录：
 
